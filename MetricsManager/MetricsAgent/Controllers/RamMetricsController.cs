@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MetricsAgent.Interfaces;
+using MetricsManager.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsAgent.Controllers
 {
@@ -10,13 +9,12 @@ namespace MetricsAgent.Controllers
     /// Контроллер агента сбора метрик оперативной памяти
     /// </summary>
     [ApiController]
-    [Route("api/metrics/ram")]
-    public class RamMetricsController : Controller
+    [Route("api/[controller]")]
+    public class RamMetricsController : BaseMetricsController<IRamMetricsRepository, RamMetric>
     {
-        [HttpGet("available/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetAvailableRamFromManager([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        public RamMetricsController(ILogger<RamMetricsController> logger, IRamMetricsRepository repository) : base(logger, repository)
         {
-            return Ok();
+            _logger.LogDebug(1, "NLog встроен в RamMetricsController");
         }
     }
 }

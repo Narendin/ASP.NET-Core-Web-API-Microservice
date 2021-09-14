@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,12 @@ namespace MetricsManager.Controllers
     /// Контроллер менеджера сбора метрик оперативной памяти
     /// </summary>
     [ApiController]
-    [Route("api/metrics/ram")]
+    [Route("api/[controller]")]
     public class RamMetricsController : BaseMetricsController
     {
+        public RamMetricsController(ILogger<BaseMetricsController> logger) : base(logger)
+        {
+            _logger.LogDebug(1, "NLog встроен в RamMetricsController");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,13 @@ namespace MetricsManager.Controllers
     /// </summary>
     public abstract class BaseMetricsController : Controller
     {
+        public readonly ILogger<BaseMetricsController> _logger;
+
+        public BaseMetricsController(ILogger<BaseMetricsController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
         public virtual IActionResult GetMetricsFromAgent([FromRoute] int agentId, [FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
         {

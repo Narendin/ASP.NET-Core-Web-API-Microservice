@@ -1,16 +1,13 @@
+using MetricsAgent.Interfaces;
+using MetricsAgent.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Data.SQLite;
 
 namespace MetricsAgent
 {
@@ -26,12 +23,107 @@ namespace MetricsAgent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsAgent", Version = "v1" });
             });
+            services.AddScoped<ICpuMetricsRepository, CpuMetricsRepository>();
+            services.AddScoped<IDotNetMetricsRepository, DotNetMetricsRepository>();
+            services.AddScoped<IHddMetricsRepository, HddMetricsRepository>();
+            services.AddScoped<INetworkMetricsRepository, NetworkMetricsRepository>();
+            services.AddScoped<IRamMetricsRepository, RamMetricsRepository>();
+            ConfigureSqlLiteConnection(services);
+        }
+
+        private void ConfigureSqlLiteConnection(IServiceCollection services)
+        {
+            const string connectionString = SQLConnectionString.ConnectionString;
+            var connection = new SQLiteConnection(connectionString);
+            connection.Open();
+            PrepareSchema(connection);
+        }
+
+        private void PrepareSchema(SQLiteConnection connection)
+        {
+            using (var command = new SQLiteCommand(connection))
+            {
+                command.CommandText = "DROP TABLE IF EXISTS cpumetrics";
+                command.ExecuteNonQuery();
+
+                command.CommandText = @"CREATE TABLE cpumetrics(id INTEGER PRIMARY KEY, value INT, time LONG)";
+                command.ExecuteNonQuery();
+
+                Random rnd = new Random(10);
+                for (int i = 1; i <= 10; i++)
+                {
+                    command.CommandText = "INSERT INTO cpumetrics(value,time) VALUES (@value,@time);";
+                    command.Parameters.AddWithValue("@value", rnd.Next(100));
+                    command.Parameters.AddWithValue("@time", new DateTimeOffset(new DateTime(2021, 5, i, 0, 0, 0, 0, DateTimeKind.Utc)).ToUnixTimeSeconds());
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+
+                command.CommandText = "DROP TABLE IF EXISTS dotnetmetrics";
+                command.ExecuteNonQuery();
+
+                command.CommandText = @"CREATE TABLE dotnetmetrics(id INTEGER PRIMARY KEY, value INT, time LONG)";
+                command.ExecuteNonQuery();
+
+                for (int i = 1; i <= 10; i++)
+                {
+                    command.CommandText = "INSERT INTO dotnetmetrics(value,time) VALUES (@value,@time);";
+                    command.Parameters.AddWithValue("@value", rnd.Next(100));
+                    command.Parameters.AddWithValue("@time", new DateTimeOffset(new DateTime(2021, 5, i, 0, 0, 0, 0, DateTimeKind.Utc)).ToUnixTimeSeconds());
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+
+                command.CommandText = "DROP TABLE IF EXISTS hddmetrics";
+                command.ExecuteNonQuery();
+
+                command.CommandText = @"CREATE TABLE hddmetrics(id INTEGER PRIMARY KEY, value INT, time LONG)";
+                command.ExecuteNonQuery();
+
+                for (int i = 1; i <= 10; i++)
+                {
+                    command.CommandText = "INSERT INTO hddmetrics(value,time) VALUES (@value,@time);";
+                    command.Parameters.AddWithValue("@value", rnd.Next(100));
+                    command.Parameters.AddWithValue("@time", new DateTimeOffset(new DateTime(2021, 5, i, 0, 0, 0, 0, DateTimeKind.Utc)).ToUnixTimeSeconds());
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+
+                command.CommandText = "DROP TABLE IF EXISTS networkmetrics";
+                command.ExecuteNonQuery();
+
+                command.CommandText = @"CREATE TABLE networkmetrics(id INTEGER PRIMARY KEY, value INT, time LONG)";
+                command.ExecuteNonQuery();
+
+                for (int i = 1; i <= 10; i++)
+                {
+                    command.CommandText = "INSERT INTO networkmetrics(value,time) VALUES (@value,@time);";
+                    command.Parameters.AddWithValue("@value", rnd.Next(100));
+                    command.Parameters.AddWithValue("@time", new DateTimeOffset(new DateTime(2021, 5, i, 0, 0, 0, 0, DateTimeKind.Utc)).ToUnixTimeSeconds());
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+
+                command.CommandText = "DROP TABLE IF EXISTS rammetrics";
+                command.ExecuteNonQuery();
+
+                command.CommandText = @"CREATE TABLE rammetrics(id INTEGER PRIMARY KEY, value INT, time LONG)";
+                command.ExecuteNonQuery();
+
+                for (int i = 1; i <= 10; i++)
+                {
+                    command.CommandText = "INSERT INTO rammetrics(value,time) VALUES (@value,@time);";
+                    command.Parameters.AddWithValue("@value", rnd.Next(100));
+                    command.Parameters.AddWithValue("@time", new DateTimeOffset(new DateTime(2021, 5, i, 0, 0, 0, 0, DateTimeKind.Utc)).ToUnixTimeSeconds());
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

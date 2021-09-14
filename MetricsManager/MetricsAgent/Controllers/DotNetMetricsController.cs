@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MetricsAgent.Interfaces;
+using MetricsManager.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsAgent.Controllers
 {
@@ -10,13 +9,12 @@ namespace MetricsAgent.Controllers
     /// Контроллер агента сбора метрик dotNet
     /// </summary>
     [ApiController]
-    [Route("api/metrics/dotNet")]
-    public class DotNetMetricsController : Controller
+    [Route("api/[controller]")]
+    public class DotNetMetricsController : BaseMetricsController<IDotNetMetricsRepository, DotNetMetric>
     {
-        [HttpGet("errors-count/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetErrorsCountFromManager([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        public DotNetMetricsController(ILogger<DotNetMetricsController> logger, IDotNetMetricsRepository repository) : base(logger, repository)
         {
-            return Ok();
+            _logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
         }
     }
 }

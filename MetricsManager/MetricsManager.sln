@@ -7,11 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManager", "MetricsMa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManager.Entities", "MetricsManager.Entities\MetricsManager.Entities.csproj", "{C1D30F65-6673-4336-B8BC-DE09C342F765}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsManager.Tests", "MetricsManager.Tests\MetricsManager.Tests.csproj", "{CFD5B72A-0DC3-493A-ABF0-251304300635}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManager.Tests", "MetricsManager.Tests\MetricsManager.Tests.csproj", "{CFD5B72A-0DC3-493A-ABF0-251304300635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsAgent", "MetricsAgent\MetricsAgent.csproj", "{D99BD311-A264-42B1-9D4B-CE431DD656C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgent", "MetricsAgent\MetricsAgent.csproj", "{D99BD311-A264-42B1-9D4B-CE431DD656C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsAgent.Tests", "MetricsAgent.Tests\MetricsAgent.Tests.csproj", "{475B26EF-5DF3-4918-80DB-89E4473A5333}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgent.Tests", "MetricsAgent.Tests\MetricsAgent.Tests.csproj", "{475B26EF-5DF3-4918-80DB-89E4473A5333}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60C8209A-E818-4735-9F54-0883A57829A6}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

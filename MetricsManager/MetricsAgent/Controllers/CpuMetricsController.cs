@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MetricsAgent.Interfaces;
+using MetricsManager.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsAgent.Controllers
 {
@@ -10,13 +10,12 @@ namespace MetricsAgent.Controllers
     /// Контроллер агента сбора метрик процессора
     /// </summary>
     [ApiController]
-    [Route("api/metrics/cpu")]
-    public class CpuMetricsController : Controller
+    [Route("api/[controller]")]
+    public class CpuMetricsController : BaseMetricsController<ICpuMetricsRepository, CpuMetric>
     {
-        [HttpGet("/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromManager([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        public CpuMetricsController(ILogger<CpuMetricsController> logger, ICpuMetricsRepository repository) : base(logger, repository)
         {
-            return Ok();
+            _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
         }
     }
 }

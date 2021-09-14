@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MetricsAgent.Interfaces;
+using MetricsManager.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsAgent.Controllers
 {
@@ -10,13 +9,12 @@ namespace MetricsAgent.Controllers
     /// Контроллер агента сбора метрик жестких дисков
     /// </summary>
     [ApiController]
-    [Route("api/metrics/hdd")]
-    public class HddMetricsController : Controller
+    [Route("api/[controller]")]
+    public class HddMetricsController : BaseMetricsController<IHddMetricsRepository, HddMetric>
     {
-        [HttpGet("left/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetLeftFromManager([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        public HddMetricsController(ILogger<HddMetricsController> logger, IHddMetricsRepository repository) : base(logger, repository)
         {
-            return Ok();
+            _logger.LogDebug(1, "NLog встроен в HddMetricsController");
         }
     }
 }

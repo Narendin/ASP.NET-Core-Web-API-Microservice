@@ -11,21 +11,18 @@ namespace MetricsManager.Controllers
     /// Контроллер менеджера сбора метрик процессора
     /// </summary>
     [ApiController]
-    [Route("api/metrics/cpu")]
+    [Route("api/[controller]")]
     public class CpuMetricsController : BaseMetricsController
     {
-        private readonly ILogger<CpuMetricsController> _logger;
-
-        public CpuMetricsController(ILogger<CpuMetricsController> logger)
+        public CpuMetricsController(ILogger<CpuMetricsController> logger) : base(logger)
         {
-            _logger = logger;
             _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
         }
 
         public override IActionResult GetMetricsFromAgent([FromRoute] int agentId, [FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
         {
             var result = base.GetMetricsFromAgent(agentId, fromTime, toTime);
-            _logger.LogInformation($"Получили метсрики процессора от агента {agentId}");
+            _logger.LogInformation($"Получили метрики процессора  c {fromTime} по {toTime} от агента {agentId}");
             return result;
         }
     }

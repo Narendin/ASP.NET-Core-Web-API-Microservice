@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,12 @@ namespace MetricsManager.Controllers
     /// Контроллер менеджера сбора метрик сети
     /// </summary>
     [ApiController]
-    [Route("api/metrics/network")]
+    [Route("api/[controller]")]
     public class NetworkMetricsController : BaseMetricsController
     {
+        public NetworkMetricsController(ILogger<BaseMetricsController> logger) : base(logger)
+        {
+            _logger.LogDebug(1, "NLog встроен в NetworkMetricsController");
+        }
     }
 }
