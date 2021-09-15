@@ -1,5 +1,6 @@
-﻿using MetricsAgent.Interfaces;
-using MetricsManager.Entities;
+﻿using MetricsAgent.DB;
+using MetricsAgent.Interfaces;
+using MetricsManager.Entities.Metrics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -10,11 +11,14 @@ namespace MetricsAgent.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class RamMetricsController : BaseMetricsController<IRamMetricsRepository, RamMetric>
+    public class RamMetricsController : BaseMetricsController<IRepository<RamMetric>, RamMetric>
     {
-        public RamMetricsController(ILogger<RamMetricsController> logger, IRamMetricsRepository repository) : base(logger, repository)
+        public RamMetricsController(
+            ILogger<RamMetricsController> logger,
+            IRepository<RamMetric> repository,
+            Table tableName = Table.rammetrics) : base(logger, repository, tableName)
         {
-            _logger.LogDebug(1, "NLog встроен в RamMetricsController");
+            logger.LogDebug(1, "NLog встроен в RamMetricsController");
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using MetricsAgent.Interfaces;
-using MetricsManager.Entities;
+﻿using MetricsAgent.DB;
+using MetricsAgent.Interfaces;
+using MetricsManager.Entities.Metrics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -10,11 +11,14 @@ namespace MetricsAgent.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class DotNetMetricsController : BaseMetricsController<IDotNetMetricsRepository, DotNetMetric>
+    public class DotNetMetricsController : BaseMetricsController<IRepository<DotNetMetric>, DotNetMetric>
     {
-        public DotNetMetricsController(ILogger<DotNetMetricsController> logger, IDotNetMetricsRepository repository) : base(logger, repository)
+        public DotNetMetricsController(
+            ILogger<DotNetMetricsController> logger,
+            IRepository<DotNetMetric> repository,
+            Table tableName = Table.dotnetmetrics) : base(logger, repository, tableName)
         {
-            _logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
+            logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
         }
     }
 }

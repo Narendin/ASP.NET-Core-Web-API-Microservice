@@ -1,5 +1,6 @@
-﻿using MetricsAgent.Interfaces;
-using MetricsManager.Entities;
+﻿using MetricsAgent.DB;
+using MetricsAgent.Interfaces;
+using MetricsManager.Entities.Metrics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -10,11 +11,14 @@ namespace MetricsAgent.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class NetworkMetricsController : BaseMetricsController<INetworkMetricsRepository, NetworkMetric>
+    public class NetworkMetricsController : BaseMetricsController<IRepository<NetworkMetric>, NetworkMetric>
     {
-        public NetworkMetricsController(ILogger<NetworkMetricsController> logger, INetworkMetricsRepository repository) : base(logger, repository)
+        public NetworkMetricsController(
+            ILogger<NetworkMetricsController> logger,
+            IRepository<NetworkMetric> repository,
+            Table tableName = Table.networkmetrics) : base(logger, repository, tableName)
         {
-            _logger.LogDebug(1, "NLog встроен в NetworkMetricsController");
+            logger.LogDebug(1, "NLog встроен в NetworkMetricsController");
         }
     }
 }

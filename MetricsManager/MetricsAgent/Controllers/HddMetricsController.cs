@@ -1,5 +1,6 @@
-﻿using MetricsAgent.Interfaces;
-using MetricsManager.Entities;
+﻿using MetricsAgent.DB;
+using MetricsAgent.Interfaces;
+using MetricsManager.Entities.Metrics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -10,11 +11,14 @@ namespace MetricsAgent.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class HddMetricsController : BaseMetricsController<IHddMetricsRepository, HddMetric>
+    public class HddMetricsController : BaseMetricsController<IRepository<HddMetric>, HddMetric>
     {
-        public HddMetricsController(ILogger<HddMetricsController> logger, IHddMetricsRepository repository) : base(logger, repository)
+        public HddMetricsController(
+            ILogger<HddMetricsController> logger,
+            IRepository<HddMetric> repository,
+            Table tableName = Table.hddmetrics) : base(logger, repository, tableName)
         {
-            _logger.LogDebug(1, "NLog встроен в HddMetricsController");
+            logger.LogDebug(1, "NLog встроен в HddMetricsController");
         }
     }
 }

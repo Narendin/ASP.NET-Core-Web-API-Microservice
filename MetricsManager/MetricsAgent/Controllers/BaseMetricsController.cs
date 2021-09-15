@@ -1,4 +1,5 @@
-﻿using MetricsAgent.Interfaces;
+﻿using MetricsAgent.DB;
+using MetricsAgent.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,15 +11,19 @@ namespace MetricsAgent.Controllers
     /// </summary>
     /// <typeparam name="TRepo">Репозиторий</typeparam>
     /// <typeparam name="TMetric">Тип метрик</typeparam>
-    public abstract class BaseMetricsController<TRepo, TMetric> : Controller where TRepo : IRepository<TMetric> where TMetric : class
+    public abstract class BaseMetricsController<TRepo, TMetric> : Controller, IMetricsController
+        where TRepo : IRepository<TMetric>
+        where TMetric : class
     {
-        public readonly ILogger<BaseMetricsController<TRepo, TMetric>> _logger;
-        public readonly TRepo _repository;
+        private readonly ILogger<BaseMetricsController<TRepo, TMetric>> _logger;
+        private readonly TRepo _repository;
+        private readonly Table _tableName;
 
-        public BaseMetricsController(ILogger<BaseMetricsController<TRepo, TMetric>> logger, TRepo repository)
+        public BaseMetricsController(ILogger<BaseMetricsController<TRepo, TMetric>> logger, TRepo repository, Table tableName)
         {
             _logger = logger;
             _repository = repository;
+            _tableName = tableName;
         }
 
         /// <summary>
@@ -31,7 +36,8 @@ namespace MetricsAgent.Controllers
         public virtual IActionResult GetByTimePeriod([FromRoute] DateTime fromTime, [FromRoute] DateTime toTime)
         {
             _logger.LogInformation($"Подключение к контроллеру {_logger.GetType().GetGenericArguments()[0].Name}");
-            _logger.LogInformation($"Получение показателей за период: {fromTime}, {toTime}");
+            _logger.LogInformation($"Получение показателей за период: с {fromTime} по {toTime}");
+            _repository.TableName = _tableName;
             var result = _repository.GetByTimePeriod(fromTime, toTime);
             if (result is null)
             {
@@ -40,6 +46,24 @@ namespace MetricsAgent.Controllers
             }
             _logger.LogInformation("Запрос выполнен успешно");
             return Ok(result);
+        }
+
+        [HttpPost("create/time/{time}/value/{value}")]
+        public virtual IActionResult Create([FromRoute] DateTime time, [FromRoute] int value)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("update/time/{time}/lastValue/{lastValue}/newValue/{newValue}")]
+        public virtual IActionResult Update([FromRoute] DateTime time, [FromRoute] int lastValue, [FromRoute] int newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("create/time/{time}/value/{value}")]
+        public virtual IActionResult Delete([FromRoute] DateTime time, [FromRoute] int value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

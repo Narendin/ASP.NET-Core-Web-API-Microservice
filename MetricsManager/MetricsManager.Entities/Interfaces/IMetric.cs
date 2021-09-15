@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MetricsManager.Entities
+namespace MetricsManager.Entities.Interfaces
 {
-    public class BaseMetric
+    public interface IMetric
     {
         public int Id { get; set; }
 
