@@ -1,5 +1,6 @@
 ﻿using MetricsAgent.DB;
 using MetricsAgent.Interfaces;
+using MetricsManager.Entities.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,15 +12,16 @@ namespace MetricsAgent.Controllers
     /// </summary>
     /// <typeparam name="TRepo">Репозиторий</typeparam>
     /// <typeparam name="TMetric">Тип метрик</typeparam>
-    public abstract class BaseMetricsController<TRepo, TMetric> : Controller, IMetricsController
+    public abstract class BaseMetricsController<TRepo, TMetric, TDto> : Controller, IMetricsController<TDto>
         where TRepo : IRepository<TMetric>
-        where TMetric : class
+        where TMetric : class, IMetric, new()
+        where TDto : IMetricDto
     {
-        private readonly ILogger<BaseMetricsController<TRepo, TMetric>> _logger;
+        private readonly ILogger<BaseMetricsController<TRepo, TMetric, TDto>> _logger;
         private readonly TRepo _repository;
         private readonly Table _tableName;
 
-        public BaseMetricsController(ILogger<BaseMetricsController<TRepo, TMetric>> logger, TRepo repository, Table tableName)
+        public BaseMetricsController(ILogger<BaseMetricsController<TRepo, TMetric, TDto>> logger, TRepo repository, Table tableName)
         {
             _logger = logger;
             _repository = repository;
@@ -48,10 +50,17 @@ namespace MetricsAgent.Controllers
             return Ok(result);
         }
 
-        [HttpPost("create/time/{time}/value/{value}")]
-        public virtual IActionResult Create([FromRoute] DateTime time, [FromRoute] int value)
+        [HttpPost("create")]
+        public virtual IActionResult Create([FromBody] TDto request)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"Добавление новой строки с параметрами {request.Time}, {request.Value}");
+            _repository.Create(new TMetric
+            {
+                Time = request.Time,
+                Value = request.Value
+            });
+
+            return Ok();
         }
 
         [HttpPut("update/time/{time}/lastValue/{lastValue}/newValue/{newValue}")]
@@ -60,7 +69,7 @@ namespace MetricsAgent.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpDelete("create/time/{time}/value/{value}")]
+        [HttpDelete("delete/time/{time}/value/{value}")]
         public virtual IActionResult Delete([FromRoute] DateTime time, [FromRoute] int value)
         {
             throw new NotImplementedException();

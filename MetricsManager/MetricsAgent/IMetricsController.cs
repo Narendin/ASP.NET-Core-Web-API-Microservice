@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsAgent
 {
-    public interface IMetricsController
+    public interface IMetricsController<TDto>
     {
         IActionResult GetByTimePeriod([FromRoute] DateTime fromTime, [FromRoute] DateTime toTime);
 
-        IActionResult Create([FromRoute] DateTime time, [FromRoute] int value);
+        IActionResult Create([FromBody] TDto request);
 
         IActionResult Update([FromRoute] DateTime time, [FromRoute] int lastValue, [FromRoute] int newValue);
 

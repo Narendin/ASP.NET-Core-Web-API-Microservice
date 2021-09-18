@@ -68,5 +68,25 @@ namespace MetricsAgent.Repositories
             }
             return temp.Count > 0 ? temp : null;
         }
+
+        public void Create(TMetric metrics)
+        {
+            var seconds = new DateTimeOffset(metrics.Time).ToUnixTimeSeconds();
+
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                using (var cmd = new SQLiteCommand(connection))
+                {
+                    cmd.CommandText = "INSERT INTO " + TableName.ToString() + " (value, time) VALUES(@value, @time)";
+                    cmd.Parameters.AddWithValue("@value", metrics.Value);
+                    cmd.Parameters.AddWithValue("@time", seconds);
+                    cmd.Prepare();
+
+                    connection.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

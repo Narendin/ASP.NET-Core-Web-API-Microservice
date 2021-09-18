@@ -1,4 +1,5 @@
 ﻿using MetricsAgent.DB;
+using MetricsAgent.Dto;
 using MetricsAgent.Interfaces;
 using MetricsManager.Entities.Metrics;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace MetricsAgent.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class DotNetMetricsController : BaseMetricsController<IRepository<DotNetMetric>, DotNetMetric>
+    public class DotNetMetricsController : BaseMetricsController<IRepository<DotNetMetric>, DotNetMetric, DotNetMetricDto>
     {
         public DotNetMetricsController(
             ILogger<DotNetMetricsController> logger,

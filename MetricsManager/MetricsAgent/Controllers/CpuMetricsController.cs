@@ -1,4 +1,5 @@
 ﻿using MetricsAgent.DB;
+using MetricsAgent.Dto;
 using MetricsAgent.Interfaces;
 using MetricsManager.Entities.Metrics;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace MetricsAgent.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class CpuMetricsController : BaseMetricsController<IRepository<CpuMetric>, CpuMetric>
+    public class CpuMetricsController : BaseMetricsController<IRepository<CpuMetric>, CpuMetric, CpuMetricDto>
     {
         public CpuMetricsController(
             ILogger<CpuMetricsController> logger,

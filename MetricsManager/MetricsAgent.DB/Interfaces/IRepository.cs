@@ -13,5 +13,7 @@ namespace MetricsAgent.Interfaces
         Table TableName { get; set; }
 
         IList<T> GetByTimePeriod(DateTime fromTime, DateTime toTime);
+
+        void Create(T metrics);
     }
 }

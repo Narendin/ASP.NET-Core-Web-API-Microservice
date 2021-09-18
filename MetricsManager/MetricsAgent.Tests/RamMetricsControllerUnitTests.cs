@@ -1,5 +1,9 @@
 ﻿using MetricsAgent.Controllers;
-using Microsoft.AspNetCore.Mvc;
+using MetricsAgent.Dto;
+using MetricsAgent.Interfaces;
+using MetricsManager.Entities.Metrics;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using Xunit;
 
@@ -8,21 +12,23 @@ namespace MetricsAgent.Tests
     public class RamMetricsControllerUnitTests
     {
         private RamMetricsController _controller;
+        private Mock<IRepository<RamMetric>> mock;
+        private Mock<ILogger<RamMetricsController>> loggerMock;
 
         public RamMetricsControllerUnitTests()
         {
-            //        _controller = new RamMetricsController();
+            mock = new Mock<IRepository<RamMetric>>();
+            loggerMock = new Mock<ILogger<RamMetricsController>>();
+            _controller = new RamMetricsController(loggerMock.Object, mock.Object);
         }
 
         [Fact]
-        public void GetMetricsFromAgent_ReturnsOk()
+        public void Create_ShouldCall_Create_From_Repository()
         {
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
-
-            //         var result = _controller.GetAvailableRamFromManager(fromTime, toTime);
-
-            //         Assert.IsAssignableFrom<IActionResult>(result);
+            var rnd = new Random();
+            mock.Setup(repository => repository.Create(It.IsAny<RamMetric>())).Verifiable();
+            var result = _controller.Create(new RamMetricDto { Time = DateTime.Now, Value = rnd.Next(50) });
+            mock.Verify(repository => repository.Create(It.IsAny<RamMetric>()), Times.AtMostOnce());
         }
     }
 }
