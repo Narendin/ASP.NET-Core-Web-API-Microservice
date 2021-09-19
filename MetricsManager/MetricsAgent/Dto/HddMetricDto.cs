@@ -1,11 +1,9 @@
-﻿using MetricsAgent.Interfaces;
-using System;
-
-namespace MetricsAgent.Dto
+﻿namespace MetricsAgent.Dto
 {
-    public class HddMetricDto : IMetricDto
+    /// <summary>
+    /// Dto метрик жестких дисков
+    /// </summary>
+    public class HddMetricDto : BaseMetricDto
     {
-        public DateTime Time { get; set; }
-        public int Value { get; set; }
     }
 }

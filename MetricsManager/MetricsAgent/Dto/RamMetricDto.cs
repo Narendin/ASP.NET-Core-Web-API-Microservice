@@ -1,11 +1,9 @@
-﻿using MetricsAgent.Interfaces;
-using System;
-
-namespace MetricsAgent.Dto
+﻿namespace MetricsAgent.Dto
 {
-    public class RamMetricDto : IMetricDto
+    /// <summary>
+    /// Dto метрик оперативной памяти
+    /// </summary>
+    public class RamMetricDto : BaseMetricDto
     {
-        public DateTime Time { get; set; }
-        public int Value { get; set; }
     }
 }

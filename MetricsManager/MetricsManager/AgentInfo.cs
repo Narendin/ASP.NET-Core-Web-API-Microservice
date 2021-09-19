@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MetricsManager.Entities
+namespace MetricsManager
 {
     public class AgentInfo // Пока не менял, помню про то, что пользователь при регистрации не может задать себе id
     {

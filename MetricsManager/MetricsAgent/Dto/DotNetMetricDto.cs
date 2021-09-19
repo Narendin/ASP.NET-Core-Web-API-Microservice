@@ -1,11 +1,9 @@
-﻿using MetricsAgent.Interfaces;
-using System;
-
-namespace MetricsAgent.Dto
+﻿namespace MetricsAgent.Dto
 {
-    public class DotNetMetricDto : IMetricDto
+    /// <summary>
+    /// Dto метрик DotNet
+    /// </summary>
+    public class DotNetMetricDto : BaseMetricDto
     {
-        public DateTime Time { get; set; }
-        public int Value { get; set; }
     }
 }

@@ -1,7 +1,8 @@
-﻿using MetricsAgent.DB;
+﻿using AutoMapper;
+using MetricsAgent.DB.Interfaces;
 using MetricsAgent.Dto;
+using MetricsAgent.Entities.Metrics;
 using MetricsAgent.Interfaces;
-using MetricsManager.Entities.Metrics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -12,12 +13,19 @@ namespace MetricsAgent.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class CpuMetricsController : BaseMetricsController<IRepository<CpuMetric>, CpuMetric, CpuMetricDto>
+    public class CpuMetricsController : BaseMetricsController<CpuMetric, CpuMetricDto>
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="logger">Логгер</param>
+        /// <param name="repository">Репозиторий</param>
+        /// <param name="mapper">Маппер</param>
         public CpuMetricsController(
             ILogger<CpuMetricsController> logger,
-            IRepository<CpuMetric> repository,
-            Table tableName = Table.cpumetrics) : base(logger, repository, tableName)
+            IDbRepository<CpuMetric> repository,
+            IMetricMapper mapper) :
+            base(logger, repository, mapper)
         {
             logger.LogDebug(1, "NLog встроен в CpuMetricsController");
         }

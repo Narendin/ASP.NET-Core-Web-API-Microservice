@@ -10,7 +10,7 @@ namespace MetricsAgent
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var logger = NLogBuilder.ConfigureNLog("Properties/nlog.config").GetCurrentClassLogger();
             try
             {
                 logger.Debug("init main");

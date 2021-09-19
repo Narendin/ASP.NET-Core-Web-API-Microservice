@@ -1,7 +1,7 @@
 ﻿using MetricsAgent.Controllers;
+using MetricsAgent.DB.Interfaces;
 using MetricsAgent.Dto;
-using MetricsAgent.Interfaces;
-using MetricsManager.Entities.Metrics;
+using MetricsAgent.Entities.Metrics;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -9,26 +9,37 @@ using Xunit;
 
 namespace MetricsAgent.Tests
 {
+    /// <summary>
+    /// Тестирование контроллера метрик оперативной памяти
+    /// </summary>
     public class RamMetricsControllerUnitTests
     {
         private RamMetricsController _controller;
-        private Mock<IRepository<RamMetric>> mock;
+        private Mock<IDbRepository<RamMetric>> mock;
         private Mock<ILogger<RamMetricsController>> loggerMock;
+        private MetricMapper _mapper;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
         public RamMetricsControllerUnitTests()
         {
-            mock = new Mock<IRepository<RamMetric>>();
+            mock = new Mock<IDbRepository<RamMetric>>();
             loggerMock = new Mock<ILogger<RamMetricsController>>();
-            _controller = new RamMetricsController(loggerMock.Object, mock.Object);
+            _mapper = new MetricMapper();
+            _controller = new RamMetricsController(loggerMock.Object, mock.Object, _mapper);
         }
 
+        /// <summary>
+        /// Проверка метода AddAsync репозитория метрик оперативной памяти
+        /// </summary>
         [Fact]
-        public void Create_ShouldCall_Create_From_Repository()
+        public void Create_ShouldCall_AddAsync_From_Repository()
         {
             var rnd = new Random();
-            mock.Setup(repository => repository.Create(It.IsAny<RamMetric>())).Verifiable();
+            mock.Setup(repository => repository.AddAsync(It.IsAny<RamMetric>())).Verifiable();
             var result = _controller.Create(new RamMetricDto { Time = DateTime.Now, Value = rnd.Next(50) });
-            mock.Verify(repository => repository.Create(It.IsAny<RamMetric>()), Times.AtMostOnce());
+            mock.Verify(repository => repository.AddAsync(It.IsAny<RamMetric>()), Times.AtMostOnce());
         }
     }
 }

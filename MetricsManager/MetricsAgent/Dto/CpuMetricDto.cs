@@ -1,11 +1,9 @@
-﻿using MetricsAgent.Interfaces;
-using System;
-
-namespace MetricsAgent.Dto
+﻿namespace MetricsAgent.Dto
 {
-    public class CpuMetricDto : IMetricDto
+    /// <summary>
+    /// Dto метрик процессора
+    /// </summary>
+    public class CpuMetricDto : BaseMetricDto
     {
-        public DateTime Time { get; set; }
-        public int Value { get; set; }
     }
 }
