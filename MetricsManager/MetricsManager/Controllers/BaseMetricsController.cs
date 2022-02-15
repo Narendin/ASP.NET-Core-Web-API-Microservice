@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MetricsManager.DB;
+using MetricsManager.DB.Interfaces;
+using MetricsManager.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,24 +13,30 @@ namespace MetricsManager.Controllers
     /// <summary>
     /// Базовый контроллер
     /// </summary>
-    public abstract class BaseMetricsController : Controller
+    public abstract class BaseMetricsController<TDto> : Controller
     {
-        public readonly ILogger<BaseMetricsController> _logger;
+        private readonly ILogger<BaseMetricsController<TDto>> _logger;
+        private readonly IDbRepository<AgentInfo> _repository;
+        private readonly IMetricMapper _mapper;
 
-        public BaseMetricsController(ILogger<BaseMetricsController> logger)
+        public BaseMetricsController(
+            ILogger<BaseMetricsController<TDto>> logger,
+            IDbRepository<AgentInfo> repository,
+            IMetricMapper mapper)
         {
             _logger = logger;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
         public virtual IActionResult GetMetricsFromAgent([FromRoute] int agentId, [FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
         {
-            return Ok();
-        }
+            var uri = _repository.GetAll().Where(x => x.Id == agentId).Select(x => x.Adress).First();
+            if (uri == null) return BadRequest();
 
-        [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
-        public virtual IActionResult GetMetricsFromAllCluster([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
-        {
+            uri += $"/from/{fromTime}/to/{toTime}";
+
             return Ok();
         }
     }

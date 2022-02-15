@@ -1,22 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MetricsManager.DB;
+using MetricsManager.DB.Interfaces;
+using MetricsManager.Dto;
+using MetricsManager.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsManager.Controllers
 {
     /// <summary>
-    /// Контроллер менеджера сбора метрик жестких дисков
+    /// Контроллер менеджера получения метрик жестких дисков с агента
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class HddMetricsController : BaseMetricsController
+    public class HddMetricsController : BaseMetricsController<HddMetricDto>
     {
-        public HddMetricsController(ILogger<BaseMetricsController> logger) : base(logger)
+        public HddMetricsController(ILogger<HddMetricsController> logger,
+            IDbRepository<AgentInfo> repository,
+            IMetricMapper mapper)
+            : base(logger, repository, mapper)
         {
-            _logger.LogDebug(1, "NLog встроен в HddMetricsController");
         }
     }
 }

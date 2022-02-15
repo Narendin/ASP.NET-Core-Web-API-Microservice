@@ -1,7 +1,13 @@
+using MetricsManader.DB;
+using MetricsManager.DB;
+using MetricsManager.DB.Interfaces;
+using MetricsManager.DB.Repositories;
+using MetricsManager.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,12 +32,22 @@ namespace MetricsManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            // контроллеры
             services.AddControllers();
+            // сваггер
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsManager", Version = "v1" });
             });
+            // Маппер
+            services.AddSingleton<IMetricMapper, MetricMapper>();
+            // ДбКонтекст
+            services.AddDbContext<AppDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            // Репозитории
+            services.AddScoped<IDbRepository<AgentInfo>, SqLiteMetricRepository<AgentInfo>>();
+            // Джобы
+
+            // Задачи
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

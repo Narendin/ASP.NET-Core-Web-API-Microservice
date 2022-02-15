@@ -1,22 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MetricsManager.DB;
+using MetricsManager.DB.Interfaces;
+using MetricsManager.Dto;
+using MetricsManager.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsManager.Controllers
 {
     /// <summary>
-    /// Контроллер менеджера сбора метрик dotNet
+    /// Контроллер менеджера получения метрик dotNet с агента
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class DotNetMetricsController : BaseMetricsController
+    public class DotNetMetricsController : BaseMetricsController<DotNetMetricDto>
     {
-        public DotNetMetricsController(ILogger<DotNetMetricsController> logger) : base(logger)
+        public DotNetMetricsController(
+            ILogger<DotNetMetricsController> logger,
+            IDbRepository<AgentInfo> repository,
+            IMetricMapper mapper)
+            : base(logger, repository, mapper)
         {
-            _logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
         }
     }
 }

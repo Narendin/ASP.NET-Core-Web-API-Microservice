@@ -1,4 +1,5 @@
 using MetricsManager.Controllers;
+using MetricsManager.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Xunit;
@@ -7,7 +8,7 @@ namespace MetricsManager.Tests
 {
     public class CpuMetricsControllerUnitTests
     {
-        private BaseMetricsController _controller;
+        private BaseMetricsController<CpuMetricDto> _controller;
 
         public CpuMetricsControllerUnitTests()
         {
